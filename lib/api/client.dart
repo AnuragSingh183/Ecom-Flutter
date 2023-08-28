@@ -5,11 +5,6 @@ class ApiClient {
   final String baseUrl = "https://qwas-api.resellmall.com";
   final String token = "9|laravel_sanctum_pVNdi1YT2TvCJ4ZOR5QCBzBElMtz9GJzJNSRzI3b1b4a95c4";
 
-  ApiClient({
-    required this.baseUrl,
-    required this.token,
-  });
-
   Future<User> login(String mobile, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/api/login'),
