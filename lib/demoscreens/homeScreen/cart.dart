@@ -1,3 +1,4 @@
+import 'package:ecommerce/api/client.dart';
 import 'package:ecommerce/demoscreens/homeScreen/CoinsScreen.dart';
 import 'package:ecommerce/demoscreens/homeScreen/ProductDetails/ReturnPolicyScreen.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,37 @@ class TeachHome extends StatefulWidget {
 }
 
 class _TeachHomeState extends State<TeachHome> {
+  String UserName = "";
+  late ApiClient apiClient;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Fetch user data when the screen is initialized
+
+    apiClient = ApiClient();
+    apiClient.fetchUsers().then((users) {
+      // if (users !=null && users.isNotEmpty) {
+      //   final firstUser = users[0]; // Access the first user in the list
+      //   setState(() {
+      //     UserName = firstUser.firstName;
+      //   });
+      // } else {
+      //   print('No users found.');
+      // }
+      final firstUser = users.isNotEmpty
+          ? users[0]
+          : null; // Access the first user in the list or null if empty
+      setState(() {
+        UserName = firstUser?.firstName ??
+            ''; // Use the first user's first name if available, or an empty string
+      });
+    }).catchError((error) {
+      print('Error fetching user data: $error');
+    });
+  }
+
   void bottmSheet() async {
     await showModalBottomSheet(
       context: context,
@@ -27,111 +59,143 @@ class _TeachHomeState extends State<TeachHome> {
             borderRadius: new BorderRadius.circular(12),
           ),
           child: SingleChildScrollView(
-            child:Padding(
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(children: [
-                SizedBox(height: 20,),
-                Container(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Have More questions?",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: titlecolor,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
-                SizedBox(height: 15,),
-                Container(
-                  height: 70,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(width: 1,color: Colors.grey)
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Have More questions?",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: titlecolor,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18),
+                    ),
                   ),
-                  child: Center(
-                    child: Row(children: [
-                      SizedBox(width: 5,),
-                      Expanded(
-                          flex: 10,child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    height: 70,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(width: 1, color: Colors.grey)),
+                    child: Center(
+                      child: Row(
                         children: [
-                        Icon(Icons.phone,color: Colors.orange,)
-                      ],)),
-                      SizedBox(width: 10,),
-                      Expanded(
-                          flex: 90,child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "CALL US +917585858585",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: titlecolor,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15),
+                          SizedBox(
+                            width: 5,
                           ),
-                          Text(
-                            "We are available Mon-Sun,8AM-8PM",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: titlecolor,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 13),
+                          Expanded(
+                              flex: 10,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.phone,
+                                    color: Colors.orange,
+                                  )
+                                ],
+                              )),
+                          SizedBox(
+                            width: 10,
                           ),
-                        ],)),
-                    ],),
+                          Expanded(
+                              flex: 90,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "CALL US +917585858585",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: titlecolor,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15),
+                                  ),
+                                  Text(
+                                    "We are available Mon-Sun,8AM-8PM",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: titlecolor,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13),
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(height: 15,),
-                Container(
-                  height: 70,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(width: 1,color: Colors.grey)
+                  SizedBox(
+                    height: 15,
                   ),
-                  child: Center(
-                    child: Row(children: [
-                      SizedBox(width: 5,),
-                      Expanded(
-                          flex: 10,child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                  Container(
+                    height: 70,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(width: 1, color: Colors.grey)),
+                    child: Center(
+                      child: Row(
                         children: [
-                          Icon(Icons.mail,color: Colors.orange,)
-                        ],)),
-                      SizedBox(width: 10,),
-                      Expanded(
-                          flex: 90,child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "MAIL YOUR QUERY AT",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: titlecolor,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15),
+                          SizedBox(
+                            width: 5,
                           ),
-                          Text(
-                            "RESS@xyz.com",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: titlecolor,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 13),
+                          Expanded(
+                              flex: 10,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.mail,
+                                    color: Colors.orange,
+                                  )
+                                ],
+                              )),
+                          SizedBox(
+                            width: 10,
                           ),
-                        ],)),
-                    ],),
-                  ),
-                )
-              ],),
+                          Expanded(
+                              flex: 90,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "MAIL YOUR QUERY AT",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: titlecolor,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15),
+                                  ),
+                                  Text(
+                                    "RESS@xyz.com",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: titlecolor,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13),
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           )),
     );
@@ -143,7 +207,7 @@ class _TeachHomeState extends State<TeachHome> {
         backgroundColor: thirdColor,
         appBar: AppBar(
           title: Text(
-            "Hy! Ravi Kumar",
+            UserName,
             style: TextStyle(
                 color: titlecolor,
                 fontFamily: 'Roboto',
@@ -616,8 +680,8 @@ class _TeachHomeState extends State<TeachHome> {
                       height: 15,
                     ),
                     InkWell(
-                      onTap: (){
-                        Get.to(()=>ReturnPolicyScreen());
+                      onTap: () {
+                        Get.to(() => ReturnPolicyScreen());
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -652,7 +716,8 @@ class _TeachHomeState extends State<TeachHome> {
                     SizedBox(
                       height: 15,
                     ),
-                    InkWell(onTap: bottmSheet,
+                    InkWell(
+                      onTap: bottmSheet,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -686,9 +751,10 @@ class _TeachHomeState extends State<TeachHome> {
                     SizedBox(
                       height: 15,
                     ),
-                    InkWell(onTap: (){
-                      Get.to(()=>TermsAndConditionScreen());
-                    },
+                    InkWell(
+                      onTap: () {
+                        Get.to(() => TermsAndConditionScreen());
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

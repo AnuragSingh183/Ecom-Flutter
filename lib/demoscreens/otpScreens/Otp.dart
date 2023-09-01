@@ -9,13 +9,18 @@ import '../../utils/responsive.dart';
 import '../CreatNewPassScreen/CreatNewPasswordScreen.dart';
 
 class Otp extends StatefulWidget {
-  Otp({Key? key}) : super(key: key);
+  final String mobile;
+  Otp({Key? key, required this.mobile}) : super(key: key);
 
   @override
   State<Otp> createState() => _OtpState();
 }
 
 class _OtpState extends State<Otp> {
+  final String baseUrl;
+  final String token;
+  _OtpState(this.baseUrl, this.token);
+
   OtpFieldController otpController = OtpFieldController();
 
   String otps = "";
@@ -27,7 +32,7 @@ class _OtpState extends State<Otp> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title:  Text(
+        title: Text(
           "Verify Your OTP",
           style: TextStyle(
               color: titlecolor,
@@ -132,7 +137,9 @@ class _OtpState extends State<Otp> {
                     print("Completed: " + pin);
                   }),
               // OtpBox(),
-              SizedBox(height: 25,),
+              SizedBox(
+                height: 25,
+              ),
               Text(
                 "Resend Otp",
                 style: TextStyle(
@@ -149,12 +156,13 @@ class _OtpState extends State<Otp> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CreatNewPasswordScreen()));
+                          builder: (context) => CreatNewPasswordScreen(
+                                baseUrl: baseUrl,
+                                token: token,
+                              )));
                 },
                 text: 'Verify',
               ),
-
-
             ],
           ),
         ),

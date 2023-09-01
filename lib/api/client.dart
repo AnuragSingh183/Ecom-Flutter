@@ -1,9 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import 'models.dart';
+
+class BackendAPIError extends Error {
+  final String message;
+
+  BackendAPIError(this.message);
+}
+
 class ApiClient {
-  final String baseUrl = "https://qwas-api.resellmall.com";
-  final String token = "9|laravel_sanctum_pVNdi1YT2TvCJ4ZOR5QCBzBElMtz9GJzJNSRzI3b1b4a95c4";
+  String baseUrl = "https://qwas-api.resellmall.com";
+  String token =
+      "9|laravel_sanctum_pVNdi1YT2TvCJ4ZOR5QCBzBElMtz9GJzJNSRzI3b1b4a95c4";
 
   Future<User> login(String mobile, String password) async {
     final response = await http.post(
@@ -12,12 +21,15 @@ class ApiClient {
       body: {'mobile': mobile, 'password': password},
     );
 
-    if (response.statusCode == 200) {
-      final jsonBody = json.decode(response.body);
+    final jsonBody = json.decode(response.body);
+
+    if (jsonBody.containsKey('user')) {
       return User.fromJson(jsonBody['user']);
-    } else {
-      throw Exception('Failed to login');
+    } else if (jsonBody.containsKey('message')) {
+      throw BackendAPIError(jsonBody.toString());
     }
+
+    throw BackendAPIError('Failed to parse API response');
   }
 
   Future<User> createUser(Map<String, dynamic> userData) async {
@@ -30,12 +42,15 @@ class ApiClient {
       body: userData,
     );
 
-    if (response.statusCode == 200) {
-      final jsonBody = json.decode(response.body);
+    final jsonBody = json.decode(response.body);
+
+    if (jsonBody.containsKey('user')) {
       return User.fromJson(jsonBody['user']);
-    } else {
-      throw Exception('Failed to create user');
+    } else if (jsonBody.containsKey('message')) {
+      throw BackendAPIError(jsonBody.toString());
     }
+
+    throw BackendAPIError('Failed to parse API response');
   }
 
   Future<List<User>> fetchUsers() async {
@@ -44,12 +59,15 @@ class ApiClient {
       headers: {'Authorization': 'Bearer $token'},
     );
 
-    if (response.statusCode == 200) {
-      final jsonBody = json.decode(response.body);
+    final jsonBody = json.decode(response.body);
+
+    if (jsonBody.containsKey('users')) {
       final userList = jsonBody['users'] as List<dynamic>;
       return userList.map((userJson) => User.fromJson(userJson)).toList();
-    } else {
-      throw Exception('Failed to fetch users');
+    } else if (jsonBody.containsKey('message')) {
+      throw BackendAPIError(jsonBody.toString());
     }
+
+    throw BackendAPIError('Failed to parse API response');
   }
 }

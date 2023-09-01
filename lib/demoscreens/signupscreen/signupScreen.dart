@@ -1,3 +1,5 @@
+import 'package:ecommerce/api/client.dart';
+import 'package:ecommerce/api/models.dart';
 import 'package:ecommerce/demoscreens/widgets/long_button.dart';
 import 'package:ecommerce/utils/colors/colors.dart';
 import 'package:ecommerce/utils/responsive.dart';
@@ -14,8 +16,56 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   Screen? size;
   final visibility = true;
+
+  late ApiClient apiClient;
+
+  @override
+  void initState() {
+    super.initState();
+    apiClient = ApiClient();
+    // print('initState called. apiClient initialized: ${apiClient != null}');
+  }
+
+  Future<void> _handleSignup() async {
+    final userData = {
+      'first_name': _nameController.text,
+      'last_name': 'test name',
+      'mobile': _phoneController.text,
+      'email': _emailController.text,
+      'password': _passwordController.text,
+    };
+
+    print('User data: $userData');
+
+    try {
+      if (userData['first_name'] != null &&
+          userData['last_name'] != null &&
+          userData['mobile'] != null &&
+          userData['email'] != null &&
+          userData['password'] != null) {
+        final user = await apiClient.createUser(userData);
+        print('User created: ${user.name}');
+      } else {
+        print('Error: User data contains null values');
+      }
+    } catch (e) {
+      if (e is BackendAPIError) {
+        final errorMessage = e.message;
+
+        print(errorMessage);
+      } else {
+        print('Error creating user: $e');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     size = Screen(MediaQuery.of(context).size);
@@ -52,78 +102,109 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 Container(
                   width: size?.wp(87),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 8, right: 8),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: titlecolor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        child: TextField(
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              icon: Icon(Icons.person_outline),
-                              hintText: 'Name'),
-                        ),
-                      ),
-                      SizedBox(
-                        height: size?.hp(2),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 8, right: 8),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: titlecolor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              icon: Icon(
-                                Icons.mobile_screen_share_sharp,
-                                size: 21,
-                              ),
-                              hintText: 'Phone No.'),
-                        ),
-                      ),
-                      SizedBox(
-                        height: size?.hp(2),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 8, right: 8),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: titlecolor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        child: TextField(
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              icon: Icon(Icons.email_outlined, size: 21),
-                              hintText: 'Email Address'),
-                        ),
-                      ),
-                      SizedBox(
-                        height: size?.hp(2),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 8, right: 8),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: titlecolor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        child: TextField(
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(Icons.password, size: 21),
-                            hintText: 'Password',
-                            // suffixIcon:
-                            //     visibility ? VisibilityOn() : VisibilityOff(),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 8, right: 8),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: titlecolor),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child: TextFormField(
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return 'Please enter your name';
+                            //   }
+                            //   return null;
+                            // },
+                            controller: _nameController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                icon: Icon(Icons.person_outline),
+                                hintText: 'Name'),
                           ),
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          height: size?.hp(2),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 8, right: 8),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: titlecolor),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child: TextFormField(
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return 'Please enter your phone number';
+                            //   }
+                            //   return null;
+                            // },
+                            controller: _phoneController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                icon: Icon(
+                                  Icons.mobile_screen_share_sharp,
+                                  size: 21,
+                                ),
+                                hintText: 'Phone No.'),
+                          ),
+                        ),
+                        SizedBox(
+                          height: size?.hp(2),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 8, right: 8),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: titlecolor),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child: TextFormField(
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return 'Please enter your email Address';
+                            //   }
+                            //   return null;
+                            // },
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                icon: Icon(Icons.email_outlined, size: 21),
+                                hintText: 'Email Address'),
+                          ),
+                        ),
+                        SizedBox(
+                          height: size?.hp(2),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 8, right: 8),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: titlecolor),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child: TextFormField(
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return 'Please choose a password';
+                            //   }
+                            //   return null;
+                            // },
+                            controller: _passwordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              icon: Icon(Icons.password, size: 21),
+                              hintText: 'Password',
+                              // suffixIcon:
+                              //     visibility ? VisibilityOn() : VisibilityOff(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -133,7 +214,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   height: size?.hp(2),
                 ),
                 LongButton(
-                    action: () {
+                    action: () async {
+                      await _handleSignup();
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(

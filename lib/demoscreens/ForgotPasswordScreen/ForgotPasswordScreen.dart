@@ -17,11 +17,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Screen? size;
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-
+    return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title:  Text(
+        title: Text(
           "Forgot Password",
           style: TextStyle(
               color: titlecolor,
@@ -70,7 +69,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   fontWeight: FontWeight.w500,
                   fontSize: 16),
             ),
-            SizedBox(height: 40,),
+            SizedBox(
+              height: 40,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Container(
@@ -95,12 +96,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 padding: EdgeInsets.only(left: 8, right: 8),
                 decoration: BoxDecoration(
                     border: Border.all(color: titlecolor),
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(25))),
+                    borderRadius: BorderRadius.all(Radius.circular(25))),
                 child: TextField(
                   decoration: InputDecoration(
                       border: InputBorder.none,
-                      icon: Icon(Icons.person_outline, size: 21,color: Colors.blue,),
+                      icon: Icon(
+                        Icons.person_outline,
+                        size: 21,
+                        color: Colors.blue,
+                      ),
                       hintText: 'Enter Your Mobile Number'),
                 ),
               ),
@@ -108,7 +112,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             SizedBox(
               height: 50,
             ),
-
             Text(
               "Try Another Way",
               textAlign: TextAlign.center,
@@ -117,8 +120,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.w500,
                   fontSize: 16),
-            )
-            ,
+            ),
             SizedBox(
               height: 40,
             ),
@@ -127,12 +129,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Otp()));
+                          builder: (context) => Otp(
+                                baseUrl: '',
+                                token: '',
+                              )));
                 },
                 text: 'Send'),
-
-
-        ],),
+          ],
+        ),
       ),
     );
   }

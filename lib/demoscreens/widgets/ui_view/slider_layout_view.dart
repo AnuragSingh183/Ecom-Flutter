@@ -6,8 +6,6 @@ import 'package:ecommerce/demoscreens/widgets/widgets/slide_dots.dart';
 import 'package:ecommerce/demoscreens/widgets/widgets/slide_items/slide_item.dart';
 import 'package:flutter/material.dart';
 
-
-
 class SliderLayoutView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SliderLayoutViewState();
@@ -66,7 +64,10 @@ class _SliderLayoutViewState extends State<SliderLayoutView> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: ((context) => LoginScreen())));
+                                  builder: ((context) => LoginScreen(
+                                        baseUrl: '',
+                                        token: '',
+                                      ))));
                         },
                         child: Text(
                           Constants.SKIP,
