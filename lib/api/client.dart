@@ -158,4 +158,50 @@ class ApiClient {
       throw BackendAPIError('Failed to update password');
     }
   }
+
+  Future<List<Category>> getCategories() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/category'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final jsonBody = json.decode(response.body);
+      final categoryList = jsonBody['category'] as List<dynamic>;
+      return categoryList.map((categoryJson) {
+        return Category.fromJson(categoryJson);
+      }).toList();
+    } else {
+      throw Exception('Failed to get categories');
+    }
+  }
+
+  Future<Category> getCategoryDetails(int categoryId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/category/$categoryId'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final jsonBody = json.decode(response.body);
+      return Category.fromJson(jsonBody['category']);
+    } else {
+      throw Exception('Failed to get category details');
+    }
+  }
+
+  Future<Category> getSubcategoryDetails(int categoryId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/show-subcategory/$categoryId'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final jsonBody = json.decode(response.body);
+      return Category.fromJson(jsonBody['category']);
+    } else {
+      throw Exception('Failed to get subcategories');
+    }
+  }
+
 }
