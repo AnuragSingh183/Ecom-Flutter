@@ -4,7 +4,6 @@ import 'package:ecommerce/utils/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
-
 import '../../utils/responsive.dart';
 import '../CreatNewPassScreen/CreatNewPasswordScreen.dart';
 
@@ -17,13 +16,14 @@ class Otp extends StatefulWidget {
 }
 
 class _OtpState extends State<Otp> {
-  final String baseUrl;
-  final String token;
-  _OtpState(this.baseUrl, this.token);
-
+  _OtpState();
   OtpFieldController otpController = OtpFieldController();
 
   String otps = "";
+
+  bool isOtpFilled() {
+    return otps.isNotEmpty;
+  }
 
   Screen? size;
   @override
@@ -93,7 +93,7 @@ class _OtpState extends State<Otp> {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "A 6 digit code has been sent to",
+                          "A 4 digit code has been sent to",
                           style: TextStyle(
                               fontSize: 18,
                               fontFamily: 'Roboto',
@@ -104,7 +104,7 @@ class _OtpState extends State<Otp> {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "8018xxxxxx",
+                          widget.mobile,
                           textScaleFactor: 1.4,
                           style: TextStyle(
                             fontFamily: 'Roboto',
@@ -122,7 +122,7 @@ class _OtpState extends State<Otp> {
               ),
               OTPTextField(
                   controller: otpController,
-                  length: 6,
+                  length: 4,
                   width: getWidth(context) / 1.2,
                   textFieldAlignment: MainAxisAlignment.spaceBetween,
                   fieldWidth: 40,
@@ -153,13 +153,22 @@ class _OtpState extends State<Otp> {
               ),
               LongButton(
                 action: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CreatNewPasswordScreen(
-                                baseUrl: baseUrl,
-                                token: token,
-                              )));
+                  if (isOtpFilled()) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreatNewPasswordScreen(
+                                  otp: otps,
+                                  mobile: widget.mobile,
+                                )));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Please fill in the OTP field.'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  }
                 },
                 text: 'Verify',
               ),

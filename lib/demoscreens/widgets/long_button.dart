@@ -6,7 +6,10 @@ class LongButton extends StatelessWidget {
   late String text;
   late Function() action;
 
-  LongButton({required this.action, required this.text});
+  LongButton({
+    required this.action,
+    required this.text,
+  });
 
   Screen? size;
   @override

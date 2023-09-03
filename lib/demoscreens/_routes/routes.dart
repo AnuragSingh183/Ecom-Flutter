@@ -5,16 +5,9 @@ import 'package:flutter/widgets.dart';
 
 import '../SplashScreen/splash_screen.dart';
 
-late final String baseUrl;
-
-late final String token;
-
-late final Map<String, WidgetBuilder> routes = {
+final Map<String, WidgetBuilder> routes = {
   splashScreen.routeName: (context) => splashScreen(),
   homeScreen.routeName: (context) => homeScreen(),
-  LoginScreen.routeName: (context) => LoginScreen(
-        baseUrl: baseUrl,
-        token: token,
-      ),
+  LoginScreen.routeName: (context) => LoginScreen(),
   CategoryScreen.routeName: (context) => CategoryScreen(),
 };

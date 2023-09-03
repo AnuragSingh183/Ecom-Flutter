@@ -6,6 +6,7 @@ import 'package:responsive_framework/utils/scroll_behavior.dart';
 import 'demoscreens/SplashScreen/splash_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
           const ResponsiveBreakpoint.autoScale(1000, name: TABLET),
           const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
           const ResponsiveBreakpoint.autoScale(2460, name: "4K"),
-        ],),
+        ],
+      ),
       title: 'ResellMall',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

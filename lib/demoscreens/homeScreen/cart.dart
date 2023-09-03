@@ -1,9 +1,9 @@
-import 'package:ecommerce/api/client.dart';
 import 'package:ecommerce/demoscreens/homeScreen/CoinsScreen.dart';
 import 'package:ecommerce/demoscreens/homeScreen/ProductDetails/ReturnPolicyScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../api/client.dart';
 import '../../utils/colors/colors.dart';
 import 'ProductDetails/EditProfileScreen.dart';
 import 'ProductDetails/ResetPasswordScreen.dart';
@@ -208,6 +208,7 @@ class _TeachHomeState extends State<TeachHome> {
         appBar: AppBar(
           title: Text(
             UserName,
+            //"Hy! Ravi Kumar",
             style: TextStyle(
                 color: titlecolor,
                 fontFamily: 'Roboto',

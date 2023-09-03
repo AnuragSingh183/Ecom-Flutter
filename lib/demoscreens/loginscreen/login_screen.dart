@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:ecommerce/demoscreens/otpScreens/Otp.dart';
 import 'package:ecommerce/demoscreens/signupscreen/signupScreen.dart';
 import 'package:ecommerce/demoscreens/widgets/long_button.dart';
+import 'package:ecommerce/utils/avatar.dart';
 import 'package:ecommerce/utils/colors/colors.dart';
 import 'package:ecommerce/utils/responsive.dart';
 import 'package:flutter/material.dart';
@@ -14,17 +13,34 @@ import '../ForgotPasswordScreen/ForgotPasswordScreen.dart';
 import '../../api/client.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key, required this.baseUrl, required this.token})
-      : super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
   static const routeName = '/login-screen';
 
-  final String baseUrl;
-  final String token;
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Login Failed'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Screen? size;
   var visibility = true;
   late ApiClient apiClient = ApiClient();
@@ -178,27 +194,27 @@ class _LoginScreenState extends State<LoginScreen> {
                         action: () async {
                           if (_formKey.currentState!.validate()) {
                             try {
-                              // Call the login function with the user's input
                               final user = await apiClient.login(
                                   mobileController.text,
                                   passwordController.text);
-
-                              print('Login successful');
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BottomNavigation(),
-                                ),
-                              );
+                              if (user != null) {
+                                print('Login successful');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BottomNavigation(),
+                                  ),
+                                );
+                              } else {
+                                _showErrorDialog(
+                                    "Invalid credentials. Please check your mobile and password.");
+                              }
                             } catch (e) {
+                              _showErrorDialog(
+                                  "Invalid credentials. Please check your mobile and password.");
                               print('Login failed: $e');
                             }
                           }
-
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => BottomNavigation()));
                         },
                         text: 'Login'),
                   ),

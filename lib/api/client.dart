@@ -14,6 +14,34 @@ class ApiClient {
   String token =
       "9|laravel_sanctum_pVNdi1YT2TvCJ4ZOR5QCBzBElMtz9GJzJNSRzI3b1b4a95c4";
 
+  // Future<bool> isEmailTaken(String email) async {
+  //   final response = await http.get(
+  //     Uri.parse('$baseUrl/api/users?email=$email'),
+  //   );
+
+  //   if (response.statusCode == 200) {
+  //     final Map<String, dynamic> data = json.decode(response.body);
+  //     return data['taken'] == true;
+  //   } else {
+  //     throw Exception('Failed to check email availability');
+  //   }
+  // }
+
+  // Future<bool> isPhoneTaken(String mobile) async {
+  //   final response = await http.get(
+  //     Uri.parse(
+  //         '$baseUrl/api/users?mobile=$mobile'), // Replace with your actual API endpoint
+  //   );
+
+  //   if (response.statusCode == 200) {
+  //     // Parse the response from your server, e.g., {"taken": true} or {"taken": false}
+  //     final Map<String, dynamic> data = json.decode(response.body);
+  //     return data['taken'] == true;
+  //   } else {
+  //     throw Exception('Failed to check mobile number availability');
+  //   }
+  // }
+
   Future<User> login(String mobile, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/api/login'),
@@ -69,5 +97,65 @@ class ApiClient {
     }
 
     throw BackendAPIError('Failed to parse API response');
+  }
+
+  Future<void> resetPassword(String mobile) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/api/reset-password'),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': 'Bearer $token',
+        },
+        body: {
+          'mobile': mobile,
+        },
+      );
+
+      final jsonBody = json.decode(response.body);
+      print('Response body: ${response.body}');
+
+      if (jsonBody.containsKey('messgae')) {
+        // Password reset request was successful.
+        print(jsonBody['messgae']);
+      } else if (jsonBody.containsKey('error')) {
+        throw BackendAPIError(jsonBody['error']);
+      } else {
+        throw BackendAPIError('Failed to reset password');
+      }
+    } catch (e) {
+      print('An error occurred during password reset: $e');
+      throw BackendAPIError('Failed to reset password');
+    }
+  }
+
+  Future<void> updatePassword(
+      String mobile, String otp, String password) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/api/update-password'),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Bearer $token',
+      },
+      body: {
+        'mobile': mobile,
+        'otp': otp,
+        'password': password,
+      },
+    );
+
+    if (response.body.toLowerCase().contains('otp is invalid')) {
+      throw BackendAPIError("OTP you entered is incorrect");
+    }
+
+    final jsonBody = json.decode(response.body);
+
+    if (jsonBody.containsKey('messgae')) {
+      print(jsonBody['messgae']);
+    } else if (jsonBody.containsKey('error')) {
+      throw BackendAPIError(jsonBody['error']);
+    } else {
+      throw BackendAPIError('Failed to update password');
+    }
   }
 }

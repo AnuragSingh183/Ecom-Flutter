@@ -64,10 +64,7 @@ class _SliderLayoutViewState extends State<SliderLayoutView> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: ((context) => LoginScreen(
-                                        baseUrl: '',
-                                        token: '',
-                                      ))));
+                                  builder: ((context) => LoginScreen())));
                         },
                         child: Text(
                           Constants.SKIP,
