@@ -1,7 +1,6 @@
 enum UserStatus {
-  basicUser, // 1
-  verifiedUser, // 2
-  adminUser, // 3
+  activeUser, // 1
+  inactiveUser, // 2
 }
 
 class User {
